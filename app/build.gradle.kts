@@ -50,6 +50,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-//    implementation(project(":dscardscanner"))
-    implementation("com.ds.cardscanner:dscardscanner:1.0.0")
+    implementation(project(":dscardscanner"))
+//    implementation("com.ds.cardscanner:dscardscanner:1.0.0")
 }
