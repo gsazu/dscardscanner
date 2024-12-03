@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".PreviewActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"/>
+
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Loading..."
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+
+    <Button
+        android:id="@+id/btn_scanAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ScanAgain"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btn_scanBackSide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan Back Side"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"/>
+</LinearLayout>
