@@ -24,5 +24,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "DSCardScannerImplee"
-include(":app")
 include(":dscardscanner")
+include(":app")
+
