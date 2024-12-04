@@ -18,6 +18,8 @@ dependencyResolutionManagement {
         mavenLocal()
         google()
         mavenCentral()
+//        maven("https://jitpack.io")
+//        maven("/Users/brightroot/.m2/repository")
     }
 }
 

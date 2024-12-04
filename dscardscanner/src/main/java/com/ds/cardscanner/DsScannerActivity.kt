@@ -83,6 +83,18 @@ class DsScannerActivity : AppCompatActivity() {
         tv_header.text = headerText
         // SurfaceView setup
         surfaceHolder = surfaceView.holder
+
+
+        cameraSetup()
+
+
+        // Capture button logic
+        captureButton.setOnClickListener {
+            captureImage()
+        }
+    }
+
+    private fun cameraSetup(){
         surfaceHolder?.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(p0: SurfaceHolder) {
                 // Open the camera and start the preview
@@ -99,12 +111,6 @@ class DsScannerActivity : AppCompatActivity() {
                 releaseCamera()
             }
         })
-
-
-        // Capture button logic
-        captureButton.setOnClickListener {
-            captureImage()
-        }
     }
 
     private fun checkPermission(permission: Array<String>) {
@@ -117,6 +123,7 @@ class DsScannerActivity : AppCompatActivity() {
                 // Requesting the permission
                 ActivityCompat.requestPermissions(this, permission, 5000)
             } else {
+                cameraSetup()
             }
         }
     }
@@ -125,6 +132,7 @@ class DsScannerActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 5000 && resultCode == RESULT_OK) {
+            cameraSetup()
         }
     }
 
