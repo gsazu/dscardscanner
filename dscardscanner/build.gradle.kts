@@ -72,7 +72,7 @@ afterEvaluate {
                     from(components["release"])
 
                     groupId = "com.ds.cardscanner"
-                    artifactId = "dsCardScanner"
+                    artifactId = "dscardscanner"
                     version = "1.0.0"
                 }
             }
