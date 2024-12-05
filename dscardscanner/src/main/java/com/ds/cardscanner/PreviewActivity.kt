@@ -6,7 +6,6 @@ import android.graphics.Matrix
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -45,7 +44,6 @@ class PreviewActivity : AppCompatActivity() {
                 // ...
                 if (visionText.text.isNotEmpty()) {
                     val textList = visionText.text.split("\n")
-                    Log.d(TAG, "onCreate: ${textList}")
                     if(DsUtils.cardNumber.isEmpty()){
                         DsUtils.getCardNumberFromList(textList)
                     }
@@ -72,7 +70,6 @@ class PreviewActivity : AppCompatActivity() {
                         }
                     }
 
-                    Log.d("cardCvv", "onCreate: ${DsUtils.cardCvv}")
 
                     Handler(Looper.getMainLooper()).postDelayed({
                         if (DsUtils.cardName.isEmpty()) {
@@ -114,7 +111,6 @@ class PreviewActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "onCreateError : ${e.message}")
             }
 
 
