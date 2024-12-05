@@ -54,9 +54,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
-
-
-
     // Google ML Kit Object Detection
     implementation("com.google.mlkit:object-detection:17.0.2")
 
@@ -72,7 +69,7 @@ afterEvaluate {
                     from(components["release"])
 
                     groupId = "com.ds.cardscanner"
-                    artifactId = "dscardscanner"
+                    artifactId = "dsCardScanner"
                     version = "1.0.0"
                 }
             }

@@ -188,6 +188,9 @@ class DsScannerActivity : AppCompatActivity() {
                         croppedBitmap = showCroppedImage(bitmap,detectedObjects.first().boundingBox)
                         startActivity(Intent(this, PreviewActivity::class.java))
                         finish()
+                    } else {
+                        Toast.makeText(this, "Please scan again", Toast.LENGTH_SHORT).show()
+                        camera?.startPreview()
                     }
                 }
                 .addOnFailureListener { e ->
@@ -204,13 +207,13 @@ class DsScannerActivity : AppCompatActivity() {
                 outputStream.close()
 
                 // Show a message indicating that the image has been saved
-                Toast.makeText(this, "Image saved at ${photoFile.absolutePath}", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Image saved at ${photoFile.absolutePath}", Toast.LENGTH_SHORT).show()
 
                 Log.d("CameraApp", "Image saved at: ${photoFile.absolutePath}")
 
             } catch (e: IOException) {
                 e.printStackTrace()
-                Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -257,7 +260,8 @@ class DsScannerActivity : AppCompatActivity() {
         DsUtils.cardExpiry = ""
         DsUtils.cardNumber = ""
         DsUtils.cardCvv = ""
-
+        DsUtils.countForExp = 0
+        DsUtils.expOne = ""
         DsScannerActivity.croppedBitmap = null
         val cardDetails = CardDetails()
         DsScannerViewModel().getInstance().setCardResponse(cardDetails)

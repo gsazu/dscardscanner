@@ -9,11 +9,9 @@ import java.io.File
 
 
 class DsUtils {
-
-
     companion object {
-        private var expOne = ""
-        private var countForExp = 0
+        var expOne = ""
+        var countForExp = 0
         var cardName = ""
         var cardExpiry = ""
         var cardNumber = ""
@@ -35,6 +33,8 @@ class DsUtils {
 
         fun getCardNumberFromList(list: List<String>): String {
             var rCardNumber = ""
+            var eightCount = 0
+            var tollFree = -1
             try {
                 for (i in list) {
                     val trimmedString = i.replace(" ", "")
@@ -47,23 +47,45 @@ class DsUtils {
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     if (rCardNumber.isEmpty()) {
-                        for (i in list) {
+                        list.forEachIndexed { index, i ->
                             val trimmedStringg = i.replace(" ", "")
+                            if(trimmedStringg.contains("toll")){
+                                tollFree = index
+                            }
                             val trimmedString = removeAlphabetsAndSpl(trimmedStringg)
                             if (trimmedString.length == 4 || trimmedString.length == 5) {
-                                if (trimmedString.length == 4) {
-                                    if(cardNumber.length < 16) {
+                                if (eightCount == 0) {
+                                    if (trimmedString.length == 4) {
+                                        if (cardNumber.length < 16) {
+                                            cardNumber += trimmedString
+                                            rCardNumber += trimmedString
+                                        }
+                                    } else {
+                                        if (cardNumber.length < 16) {
+                                            cardNumber += trimmedString.substring(1)
+                                            rCardNumber += trimmedString.substring(1)
+                                        }
+                                    }
+
+                                    Log.d("Hello", "getCardNumber: $trimmedString")
+                                }
+                            } else if(trimmedString.length == 8){
+                                if(index == tollFree || index == tollFree+1){
+
+                                } else {
+                                    if (eightCount == 0) {
+                                        cardNumber = ""
+                                        rCardNumber = ""
                                         cardNumber += trimmedString
                                         rCardNumber += trimmedString
-                                    }
-                                } else {
-                                    if(cardNumber.length < 16) {
-                                        cardNumber += trimmedString.substring(1)
-                                        rCardNumber += trimmedString.substring(1)
+                                        eightCount = 1
+                                    } else {
+                                        if (cardNumber.length < 16) {
+                                            cardNumber += trimmedString
+                                            rCardNumber += trimmedString
+                                        }
                                     }
                                 }
-
-                                Log.d("Hello", "getCardNumber: $trimmedString")
                             }
                         }
                     }
@@ -72,6 +94,79 @@ class DsUtils {
             }
 
             return rCardNumber
+        }
+
+        fun getExpiryDateFromList(valueLists: List<String>): String {
+            var rExpDate = ""
+            valueLists.forEach { value ->
+                try {
+                    val trimmedString = value.replace(" ", "")
+                    val withoutAlphabetsString = removeAlphabets(trimmedString)
+                    Log.d("WALPHA", "$withoutAlphabetsString")
+                    if (withoutAlphabetsString.isNotEmpty()) {
+                        if (withoutAlphabetsString.contains("/")) {
+                            if (withoutAlphabetsString.length < 11) {
+                                val count = countSlashes(withoutAlphabetsString)
+                                if (count == 1) {
+                                    if (withoutAlphabetsString.length == 5) {
+                                        if (countForExp == 0) {
+                                            expOne = withoutAlphabetsString
+                                            Log.d("Exp", "getExpiryDateOne: $expOne")
+//                                    cardExpiry = expOne
+                                            countForExp += 1
+                                        } else {
+                                            val expTwo = withoutAlphabetsString
+                                            Log.d("Exp", "getExpiryDateTwo: $expTwo")
+                                            if (expOne.substring(3).toInt() > expTwo.substring(3)
+                                                    .toInt()
+                                            ) {
+                                                Log.d("Hello", "getExpiryDate: $expOne")
+                                                rExpDate = expOne
+                                                cardExpiry = expOne
+                                            } else {
+                                                Log.d("Hello", "getExpiryDate: $expTwo")
+                                                rExpDate = expTwo
+                                                cardExpiry = expTwo
+                                            }
+                                            countForExp = 0
+                                            expOne = ""
+                                        }
+                                    }
+                                } else if (count == 2) {
+                                    if (withoutAlphabetsString.length == 10) {
+                                        expOne = withoutAlphabetsString.substring(0, 5)
+                                        val expTwo = withoutAlphabetsString.substring(5)
+                                        Log.d("Exp", "getExpiryDateOne: $expOne")
+                                        Log.d("Exp", "getExpiryDateTwo: $expTwo")
+                                        if (expOne.substring(3).toInt() > expTwo.substring(3)
+                                                .toInt()
+                                        ) {
+                                            Log.d("Hello", "getExpiryDate: $expOne")
+                                            rExpDate = expOne
+                                            cardExpiry = expOne
+                                        } else {
+                                            Log.d("Hello", "getExpiryDate: $expTwo")
+                                            rExpDate = expTwo
+                                            cardExpiry = expTwo
+                                        }
+                                        expOne = ""
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                } catch (e: Exception) {
+                }
+            }
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                if(cardExpiry.isEmpty() && expOne.isNotEmpty()){
+                    cardExpiry = expOne
+                    rExpDate = expOne
+                }
+            }, 1500)
+            return if (rExpDate.isNotEmpty()) "Expiry Date: $rExpDate" else ""
         }
 
         fun getExpiryDate(value: String): String {
@@ -128,6 +223,7 @@ class DsUtils {
                                 }
                             }
                         }
+
                     }
                 }
             } catch (e: Exception) {
@@ -212,7 +308,9 @@ class DsUtils {
                 "from", "thru", "exp", "date", "security",
                 "code", "syndicate", "india", "shopping",
                 "month", "year", "simply", "card", "end", "electronic",
-                "only", "use"
+                "only", "use", "payment", "com", "visit",
+                "number", "platinun", "free", "platinam",
+                "millennia"
             )
             for (i in bluffCharList) {
                 if (lowerCaseValue.contains(i)) {
@@ -278,5 +376,4 @@ class DsUtils {
         }
         return false
     }
-
 }

@@ -39,7 +39,7 @@ class PreviewActivity : AppCompatActivity() {
         imageView.setImageBitmap(bb)
         val image = InputImage.fromBitmap(bb, 0)
 
-        val result = recognizer.process(image)
+        recognizer.process(image)
             .addOnSuccessListener { visionText ->
                 // Task completed successfully
                 // ...
@@ -49,12 +49,17 @@ class PreviewActivity : AppCompatActivity() {
                     if(DsUtils.cardNumber.isEmpty()){
                         DsUtils.getCardNumberFromList(textList)
                     }
+
+                    if (DsUtils.cardExpiry.isEmpty()) {
+                        DsUtils.getExpiryDateFromList(textList).isNotEmpty()
+                    }
+
                     for (i in textList) {
-                        if (DsUtils.cardExpiry.isEmpty()) {
-                            if (DsUtils.getExpiryDate(i).isNotEmpty()) {
-                                totalString += "\n" + DsUtils.getExpiryDate(i)
-                            }
-                        }
+//                        if (DsUtils.cardExpiry.isEmpty()) {
+//                            if (DsUtils.getExpiryDate(i).isNotEmpty()) {
+//                                totalString += "\n" + DsUtils.getExpiryDate(i)
+//                            }
+//                        }
                         if (DsUtils.cardCvv.isEmpty()) {
                             if (DsUtils.getCvv(i).isNotEmpty()) {
                                 totalString += "\n" + DsUtils.cardCvv
@@ -78,7 +83,9 @@ class PreviewActivity : AppCompatActivity() {
                             } else if (DsUtils.cardExpiry.isNotEmpty() && DsUtils.cardNumber.isNotEmpty()) {
                                 DsScannerActivity.isFirstSideScanned = true
                             } else {
-                                DsScannerActivity.isFirstSideScanned = false
+                                if(!DsScannerActivity.isFirstSideScanned) {
+                                    DsScannerActivity.isFirstSideScanned = false
+                                }
                             }
                         }
 
@@ -139,6 +146,7 @@ class PreviewActivity : AppCompatActivity() {
             DsUtils.cardExpiry = ""
             DsUtils.cardNumber = ""
             DsUtils.cardCvv = ""
+            DsUtils.countForExp = 0
             DsScannerActivity.croppedBitmap = null
             startActivity(Intent(this, DsScannerActivity::class.java))
             finish()
@@ -149,6 +157,8 @@ class PreviewActivity : AppCompatActivity() {
                 DsUtils.cardExpiry = ""
                 DsUtils.cardNumber = ""
                 DsUtils.cardCvv = ""
+                DsUtils.countForExp = 0
+                DsUtils.expOne = ""
                 DsScannerActivity.headerText = "Scan First Side"
                 DsUtils.clearCache(applicationContext)
                 DsScannerActivity.isFirstSideScanned = false
