@@ -3,7 +3,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="true" />
@@ -12,12 +11,14 @@
         android:allowBackup="true"
         android:supportsRtl="true">
         <activity
-            android:name=".PreviewActivity"
+            android:name=".DsLiveScannerActivity"
             android:exported="false" />
-        <!-- android:theme="@style/Theme.DSCardScannerImplee" -->
+        <activity
+            android:name=".PreviewActivity"
+            android:exported="false" /> <!-- android:theme="@style/Theme.DSCardScannerImplee" -->
         <activity
             android:name=".DsScannerActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -9,12 +9,16 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.hardware.Camera
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
+import android.util.SparseIntArray
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -23,6 +27,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -50,6 +55,15 @@ class DsScannerActivity : AppCompatActivity() {
     private var surfaceHolderMain: SurfaceHolder? = null
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     private var inputImage:InputImage ? = null
+
+    private val ORIENTATIONS = SparseIntArray()
+
+    init {
+        ORIENTATIONS.append(Surface.ROTATION_0, 0)
+        ORIENTATIONS.append(Surface.ROTATION_90, 90)
+        ORIENTATIONS.append(Surface.ROTATION_180, 180)
+        ORIENTATIONS.append(Surface.ROTATION_270, 270)
+    }
 
     companion object{
         var croppedBitmap : Bitmap? = null
@@ -265,8 +279,30 @@ class DsScannerActivity : AppCompatActivity() {
         DsScannerActivity.croppedBitmap = null
         val cardDetails = CardDetails()
         DsScannerViewModel().getInstance().setCardResponse(cardDetails)
-
         DsUtils.clearCache(applicationContext)
         finish()
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Throws(CameraAccessException::class)
+    private fun getRotationCompensation(cameraId: String, isFrontFacing: Boolean): Int {
+        // Get the device's current rotation relative to its "native" orientation.
+        // Then, from the ORIENTATIONS table, look up the angle the image must be
+        // rotated to compensate for the device's rotation.
+        val deviceRotation = windowManager.defaultDisplay.rotation
+        var rotationCompensation = ORIENTATIONS.get(deviceRotation)
+
+        // Get the device's sensor orientation.
+        val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+        val sensorOrientation = cameraManager
+            .getCameraCharacteristics(cameraId)
+            .get(CameraCharacteristics.SENSOR_ORIENTATION)!!
+
+        if (isFrontFacing) {
+            rotationCompensation = (sensorOrientation + rotationCompensation) % 360
+        } else { // back-facing
+            rotationCompensation = (sensorOrientation - rotationCompensation + 360) % 360
+        }
+        return rotationCompensation
     }
 }

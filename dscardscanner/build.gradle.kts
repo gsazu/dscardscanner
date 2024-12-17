@@ -33,18 +33,13 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-//    implementation(libs.androidx.core.ktx)
-//    implementation(libs.androidx.appcompat)
-//    implementation(libs.material)
-//    implementation(libs.androidx.activity)
-//    implementation(libs.androidx.constraintlayout)
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso.core)
-
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
@@ -59,6 +54,15 @@ dependencies {
 
     // Google ML Kit Text Recognition (Latin Script)
     implementation("com.google.mlkit:text-recognition:16.0.1")
+
+    implementation("androidx.camera:camera-core:1.4.0")
+    implementation("androidx.camera:camera-camera2:1.4.0")
+    implementation("androidx.camera:camera-lifecycle:1.4.0")
+    implementation("androidx.camera:camera-video:1.4.0")
+
+    implementation("androidx.camera:camera-view:1.4.0")
+    implementation("androidx.camera:camera-extensions:1.4.0")
+
 }
 
 afterEvaluate {

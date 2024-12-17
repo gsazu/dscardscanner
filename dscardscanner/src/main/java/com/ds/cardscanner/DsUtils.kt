@@ -3,6 +3,7 @@ package com.ds.cardscanner
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.core.text.isDigitsOnly
 import java.io.File
 
@@ -21,6 +22,7 @@ class DsUtils {
             try {
                 val trimmedString = value.replace(" ", "")
                 if (trimmedString.length == 16 && trimmedString.isDigitsOnly()) {
+                    Log.d("Hello", "getCardNumber: $trimmedString")
                     cardNumber = trimmedString
                     rCardNumber = trimmedString
                 }
@@ -37,6 +39,7 @@ class DsUtils {
                 for (i in list) {
                     val trimmedString = i.replace(" ", "")
                     if (trimmedString.length == 16 && trimmedString.isDigitsOnly()) {
+                        Log.d("Hello", "getCardNumber: $trimmedString")
                         cardNumber = trimmedString
                         rCardNumber = trimmedString
                     }
@@ -64,6 +67,7 @@ class DsUtils {
                                         }
                                     }
 
+                                    Log.d("Hello", "getCardNumber: $trimmedString")
                                 }
                             } else if(trimmedString.length == 8){
                                 if(index == tollFree || index == tollFree+1){
@@ -98,6 +102,7 @@ class DsUtils {
                 try {
                     val trimmedString = value.replace(" ", "")
                     val withoutAlphabetsString = removeAlphabets(trimmedString)
+                    Log.d("WALPHA", "$withoutAlphabetsString")
                     if (withoutAlphabetsString.isNotEmpty()) {
                         if (withoutAlphabetsString.contains("/")) {
                             if (withoutAlphabetsString.length < 11) {
@@ -106,15 +111,20 @@ class DsUtils {
                                     if (withoutAlphabetsString.length == 5) {
                                         if (countForExp == 0) {
                                             expOne = withoutAlphabetsString
+                                            Log.d("Exp", "getExpiryDateOne: $expOne")
+//                                    cardExpiry = expOne
                                             countForExp += 1
                                         } else {
                                             val expTwo = withoutAlphabetsString
+                                            Log.d("Exp", "getExpiryDateTwo: $expTwo")
                                             if (expOne.substring(3).toInt() > expTwo.substring(3)
                                                     .toInt()
                                             ) {
+                                                Log.d("Hello", "getExpiryDate: $expOne")
                                                 rExpDate = expOne
                                                 cardExpiry = expOne
                                             } else {
+                                                Log.d("Hello", "getExpiryDate: $expTwo")
                                                 rExpDate = expTwo
                                                 cardExpiry = expTwo
                                             }
@@ -126,12 +136,16 @@ class DsUtils {
                                     if (withoutAlphabetsString.length == 10) {
                                         expOne = withoutAlphabetsString.substring(0, 5)
                                         val expTwo = withoutAlphabetsString.substring(5)
+                                        Log.d("Exp", "getExpiryDateOne: $expOne")
+                                        Log.d("Exp", "getExpiryDateTwo: $expTwo")
                                         if (expOne.substring(3).toInt() > expTwo.substring(3)
                                                 .toInt()
                                         ) {
+                                            Log.d("Hello", "getExpiryDate: $expOne")
                                             rExpDate = expOne
                                             cardExpiry = expOne
                                         } else {
+                                            Log.d("Hello", "getExpiryDate: $expTwo")
                                             rExpDate = expTwo
                                             cardExpiry = expTwo
                                         }
@@ -160,6 +174,7 @@ class DsUtils {
             try {
                 val trimmedString = value.replace(" ", "")
                 val withoutAlphabetsString = removeAlphabets(trimmedString)
+                Log.d("WALPHA", "$withoutAlphabetsString")
                 if (withoutAlphabetsString.isNotEmpty()) {
                     if (withoutAlphabetsString.contains("/")) {
                         if (withoutAlphabetsString.length < 11) {
@@ -168,15 +183,20 @@ class DsUtils {
                                 if (withoutAlphabetsString.length == 5) {
                                     if (countForExp == 0) {
                                         expOne = withoutAlphabetsString
+                                        Log.d("Exp", "getExpiryDateOne: $expOne")
+//                                    cardExpiry = expOne
                                         countForExp += 1
                                     } else {
                                         val expTwo = withoutAlphabetsString
+                                        Log.d("Exp", "getExpiryDateTwo: $expTwo")
                                         if (expOne.substring(3).toInt() > expTwo.substring(3)
                                                 .toInt()
                                         ) {
+                                            Log.d("Hello", "getExpiryDate: $expOne")
                                             rExpDate = expOne
                                             cardExpiry = expOne
                                         } else {
+                                            Log.d("Hello", "getExpiryDate: $expTwo")
                                             rExpDate = expTwo
                                             cardExpiry = expTwo
                                         }
@@ -188,10 +208,14 @@ class DsUtils {
                                 if (withoutAlphabetsString.length == 10) {
                                     expOne = withoutAlphabetsString.substring(0, 5)
                                     val expTwo = withoutAlphabetsString.substring(5)
+                                    Log.d("Exp", "getExpiryDateOne: $expOne")
+                                    Log.d("Exp", "getExpiryDateTwo: $expTwo")
                                     if (expOne.substring(3).toInt() > expTwo.substring(3).toInt()) {
+                                        Log.d("Hello", "getExpiryDate: $expOne")
                                         rExpDate = expOne
                                         cardExpiry = expOne
                                     } else {
+                                        Log.d("Hello", "getExpiryDate: $expTwo")
                                         rExpDate = expTwo
                                         cardExpiry = expTwo
                                     }
@@ -212,6 +236,7 @@ class DsUtils {
             try {
                 val trimmedString = value.trim()
                 if (trimmedString.length == 3 && trimmedString.isDigitsOnly()) {
+                    Log.d("Hello", "getCvv: $trimmedString")
                     rCvv = trimmedString
                     cardCvv = trimmedString
                 } else if (trimmedString.length == 8) {
@@ -221,6 +246,7 @@ class DsUtils {
                             if (cv.length == 3 && cv.isDigitsOnly()) {
                                 rCvv = cv
                                 cardCvv = cv
+                                Log.d("Hello", "getCvv: $cv")
                             }
                         }
                     }
@@ -236,12 +262,14 @@ class DsUtils {
             var rCardName = ""
             try {
                 val formedString = onlyAlphabets(value).trim()
+                Log.d("formedString", "getCardName: $formedString")
                 if (formedString.isNotEmpty() && formedString.length > 2) {
                     if (!isBluff(formedString)) {
                         if (cardName.isEmpty()) {
                             cardName = formedString
                             rCardName = formedString
                             cardName = formedString
+                            Log.d("Hello", "getCardName: $cardName")
                         }
                     }
                 }
