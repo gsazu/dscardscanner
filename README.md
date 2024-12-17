@@ -9,7 +9,7 @@ To implement it in your project you can add the below dependency in your `app/bu
 ```gradle
 dependencies {
     ...
-	implementation 'com.github.gsazu:dscardscanner:1.0.3'
+	implementation 'com.github.gsazu:dscardscanner:1.0.4'
 }
 ```
 
